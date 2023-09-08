@@ -2,7 +2,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { useContext } from "react";
 import IconFont from "react-native-vector-icons/FontAwesome5";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import CartContext from "./context/CardContext";
+import CartContext from "./context/CartContext";
 import Cart from "./screen/Cart";
 import Products from "./screen/Products";
 import User from "./screen/User";

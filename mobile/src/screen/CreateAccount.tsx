@@ -41,19 +41,6 @@ export const CreateAccount = () => {
     }
 
     setIsLoading(true);
-    // signUp(username, email, password)
-    //   .then(() => {
-    //     setIsLoading(false);
-    //     Alert.alert(
-    //       "Cadastro realizado com sucesso!",
-    //       "Agora você receberá um link por email para confirmar o seu cadastro e ativar a conta."
-    //     );
-    //     navigation.navigate("LoginPage");
-    //   })
-    //   .catch(() => {
-    //     alert("Verifique os dados informados e tente novamente");
-    //     setIsLoading(false);
-    //   });
   };
 
   return (

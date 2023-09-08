@@ -11,7 +11,7 @@ import {
 import { TextInputMask } from "react-native-masked-text";
 import { useSharedValue } from "react-native-reanimated";
 import CreditCard from "../components/CreditCard";
-import CartContext from "../context/CardContext";
+import CartContext from "../context/CartContext";
 import global from "../global";
 
 export default function Checkout() {

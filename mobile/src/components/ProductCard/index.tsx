@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import CartContext from "../../context/CardContext";
+import CartContext from "../../context/CartContext";
 import styles from "./styles";
 
 function ProductCard({ data, index, screen }: any) {

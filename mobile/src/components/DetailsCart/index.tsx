@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import AuthContext from "../../context/AuthContext";
-import CartContext from "../../context/CardContext";
+import CartContext from "../../context/CartContext";
 import global from "../../global";
 import styles from "./styles";
 
