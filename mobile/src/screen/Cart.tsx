@@ -3,7 +3,7 @@ import { FlatList, View } from "react-native";
 import DetailsCart from "../components/DetailsCart";
 import Empty from "../components/Empty";
 import ProductCard from "../components/ProductCard";
-import CartContext from "../context/CardContext";
+import CartContext from "../context/CartContext";
 import global from "../global";
 
 export default function Cart() {
