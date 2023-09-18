@@ -1,0 +1,120 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sectionProducts {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.product {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 15px;
+  height: 200px;
+  width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 15px;
+  margin: 10px;
+}
+
+.linkButton {
+  background-color: rgb(33, 150, 243);
+  border-radius: 15px;
+  padding: 10px;
+  color: #fff;
+  border-color: none;
+  transition: 0.8 ease-in;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  filter: brightness(90%);
+}
+
+.price {
+  color: #e73931;
+  font-weight: "bold";
+  font-size: 16px;
+  margin: 5px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #e73931;
+  color: #fff;
+}
+
+.navbar a {
+  margin: 5px;
+  text-decoration: none;
+}
+
+.toggleQuantity {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  align-items: center;
+}
+
+.toggleQuantity p {
+  margin: 0 4px 0 4px;
+}
+
+.buttonCheckout {
+  background-color: #2196f3;
+  color: #fff;
+  padding: 15px;
+  font-size: 15px;
+  border-radius: 2px;
+  border-color: transparent;
+  transition: 0.8 ease-in;
+}
+
+.buttonCheckout:hover {
+  filter: brightness(90%);
+}
+
+.trashIcon {
+  color: #e73931;
+  margin-left: 2px;
+  cursor: pointer;
+}
+
+.input {
+  margin: 5px;
+  width: 100%;
+  height: 20px;
+  padding: 5px;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.cardCredit {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.divInputs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.minorInputs {
+  width: 80px;
+  height: 20px;
+  padding: 5px;
+  font-size: 16px;
+  margin: 5px;
+}
