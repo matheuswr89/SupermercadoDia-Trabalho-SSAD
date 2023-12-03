@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Loja Virtual</title>
+	<h:outputScript name="jsf.js" library="javax.faces" target="head"></h:outputScript>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+
+<h:body>
+
+	<div id="cabecalho">
+		<h:graphicImage library="imagens" name="logo-distribuidora.png" id="logoCompany" />
+	</div>
+	
+	<div id="conteudo">
+		<h:outputScript name="jsf.js" library="javax.faces" target="head" />
+		
+		<h:form id="cadastro">
+			 <h2>
+				 <h:outputText value="Novo Produto" rendered="#{empty produtoMB.produto.id}"/>
+				 <h:outputText value="Editar Produto" rendered="#{not empty produtoMB.produto.id}"/>
+			 </h2>
+			
+			<fieldset>
+				<legend>Dados do Produto</legend>
+				
+				<h:outputLabel value="Nome:" for="nome" />
+				<h:inputText id="nome" value="#{produtoMB.produto.nome}" />
+				
+				<h:outputLabel value="Descrição:" for="descricao" />
+				<h:inputTextarea id="descricao"
+					value="#{produtoMB.produto.descricao}" />
+				
+				<h:outputLabel value="Preço:" for="preco" />
+				<h:inputText id="preco" value="#{produtoMB.produto.preco}" />
+				
+				<h:outputLabel value="Estoque Minimo:" for="estoqueMinimo" />
+				<h:inputText id="estoqueMinimo" value="#{produtoMB.produto.estoqueMinimo}" />
+				
+				<h:outputLabel value="Quantidade Estoque:" for="quantidadeEstoque" />
+				<h:inputText id="quantidadeEstoque" value="#{produtoMB.produto.quantidadeEstoque}" />
+				
+				<h:commandButton value="Gravar" action="#{produtoMB.grava}">
+					<f:ajax execute="@form" render=":cadastro :lista"/>
+				</h:commandButton>
+				
+				
+			</fieldset>
+		</h:form>
+		
+		<h2>Listagem de Produtos</h2>
+		<h:form id="lista">
+			<h:dataTable value="#{produtoMB.getProdutos()}" var="produto" styleClass="dados" rowClasses="impar,par">
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+				 	#{produto.nome}
+				 </h:column>
+				<h:column>
+					<f:facet name="header">Descrição</f:facet>
+					#{produto.descricao}
+				 </h:column>
+				<h:column>
+					<f:facet name="header">Preço</f:facet>
+				 	#{produto.preco}
+				 </h:column>
+			</h:dataTable>
+		</h:form>
+	
+		
+	</div>
+	<div id="rodape">Copyright 2023. Todos os Direitos reservados a Talita.</div>
+</h:body>
+
+</html>

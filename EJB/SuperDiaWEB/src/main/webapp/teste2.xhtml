@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Loja Virtual</title>
+	<h:outputScript name="jsf.js" library="javax.faces" target="head"></h:outputScript>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+
+<h:body>
+
+	<div id="cabecalho">
+		<h:graphicImage library="imagens" name="logo-distribuidora.png" id="logoCompany" />
+	</div>
+	
+	<div id="conteudo">
+		<h:outputScript name="jsf.js" library="javax.faces" target="head" />
+		
+		<h:form id="cadastro">
+			
+			<fieldset>
+				<legend>Dados da PEssoa</legend>
+				
+				<h:outputLabel value="Nome:" for="nome" />
+				<h:inputText id="nome" value="#{pessoaMB.pessoa.nome}" />
+				
+				<h:outputLabel value="Endereço:" for="endereco" />
+				<h:inputTextarea id="endereco"
+					value="#{pessoaMB.pessoa.endereco}" />
+				
+				<h:outputLabel value="CPF:" for="cpf" />
+				<h:inputText id="cpf" value="#{pessoaMB.pessoa.cpf}" />
+				
+				<h:outputLabel value="E-mail:" for="email" />
+				<h:inputText id="email" value="#{pessoaMB.pessoa.email}" />
+				
+				<h:outputLabel value="Telefone:" for="telefone" />
+				<h:inputText id="telefone" value="#{pessoaMB.pessoa.telefone}" />
+				
+				<h:outputLabel value="Data Nascimento:" for="dataNascimento" />
+				<h:inputText id="dataNascimento" value="#{pessoaMB.dataString}" />
+				
+				<h:commandButton value="Gravar" action="#{pessoaMB.grava}">
+					<f:ajax execute="@form" render=":cadastro :lista"/>
+				</h:commandButton>
+				
+				
+			</fieldset>
+		</h:form>
+	
+		
+	</div>
+	<div id="rodape">Copyright 2023. Todos os Direitos reservados a Talita.</div>
+</h:body>
+
+</html>
