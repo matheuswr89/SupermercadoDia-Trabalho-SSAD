@@ -9,6 +9,8 @@ export default function Navbar() {
 
   const navigateToHome = () => push("/");
   const navigateToCart = () => push("/cart");
+  const navigateToLogin = () => push("/login");
+  const navigateToCreateAccount = () => push("/createAccount");
 
   return (
     <nav className={styles.navbar}>
@@ -18,6 +20,8 @@ export default function Navbar() {
       <div>
         <a onClick={navigateToCart}>Carrinho ({quantity})</a>
         <a>Conta</a>
+        <a onClick={navigateToLogin}>Login</a>
+        <a onClick={navigateToCreateAccount}>Criar conta</a>
       </div>
     </nav>
   );

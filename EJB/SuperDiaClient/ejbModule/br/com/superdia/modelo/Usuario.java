@@ -2,6 +2,7 @@ package br.com.superdia.modelo;
 
 import java.io.Serializable;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,7 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_id")
 	private Long id;
 	
-	@OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
 	private Pessoa pessoa;
 	private String senha;
 	private String perfil;

@@ -3,11 +3,16 @@ package br.com.superdia.modelo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import org.hibernate.validator.constraints.br.CPF;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.Email;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -17,11 +22,17 @@ public class Pessoa implements Serializable {
 	private Long id;
 	private String nome;
 	private String endereco;
+	@CPF
+	@Column(unique=true)
 	private String cpf;
+	@Email
+    @Column(unique=true)
 	private String email;
 	private String telefone;
 	private LocalDate dataNascimento;
-	
+    @OneToOne(mappedBy = "pessoa")
+    private Usuario usuario;
+    
 	public Long getId() {
 		return id;
 	}
@@ -76,5 +87,13 @@ public class Pessoa implements Serializable {
 	
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }

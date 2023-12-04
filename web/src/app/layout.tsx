@@ -2,6 +2,8 @@
 import Navbar from "./components/Navbar";
 import { CartProvider } from "./context/CartContext";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
   title: "Supermecado Dias",
@@ -21,6 +23,18 @@ export default function RootLayout({
         <body>
           <Navbar />
           {children}
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </body>
       </CartProvider>
     </html>

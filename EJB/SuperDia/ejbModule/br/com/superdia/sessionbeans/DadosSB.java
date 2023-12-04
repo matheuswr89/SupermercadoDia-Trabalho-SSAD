@@ -7,9 +7,11 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.ws.rs.Path;
 
 @Stateless
 @Remote
+@Path("/inserir")
 public class DadosSB<T> implements IDados<T> {	
 	@PersistenceContext(unitName = "SuperDia")
 	EntityManager em;
