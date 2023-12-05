@@ -41,14 +41,9 @@ function ProductCard({ data, index, screen }: any) {
   return (
     <View style={styles.centeredView}>
       <View style={styles.cardView}>
-        <Image
-          style={styles.promotionImage}
-          source={{ uri: data.image }}
-          resizeMode="contain"
-        />
         <View style={styles.descriptionText}>
-          <Text style={styles.titleText}>{data.title}</Text>
-          <Text style={styles.priceText}>R$ {data.price}</Text>
+          <Text style={styles.titleText}>{data.nome}</Text>
+          <Text style={styles.priceText}>R$ {data.preco}</Text>
           <View style={styles.buttonView}>
             {!screen && (
               <TouchableHighlight style={styles.linkButton} onPress={addToCard}>

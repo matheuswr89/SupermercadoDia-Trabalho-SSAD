@@ -13,9 +13,11 @@ import { useSharedValue } from "react-native-reanimated";
 import CreditCard from "../components/CreditCard";
 import CartContext from "../context/CartContext";
 import global from "../global";
+import { validaCartao } from "../api/api";
+import { Toast } from "toastify-react-native";
 
 export default function Checkout() {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
   const { removeAll } = useContext(CartContext);
   const [cardNumber, setCardNumber] = useState("");
   const [name, setName] = useState("");
@@ -24,31 +26,22 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const spin = useSharedValue<number>(0);
 
-  const cadastrarOrdem = () => {
-    if (!cardNumber.length) {
-      Alert.alert("O número do cartão é obrigatório!");
+  const cadastrarOrdem = async () => {
+    if (!cardNumber.length || !name.length || !cvc.length || !expire.length) {
+      Alert.alert("Forneça todos os dados do cartão!");
       return;
     }
 
-    if (!name.length) {
-      Alert.alert("O nome é obrigatória!");
-      return;
-    }
-
-    if (!cvc.length) {
-      Alert.alert("O código de validação é obrigatória!");
-      return;
-    }
-
-    if (!expire.length) {
-      Alert.alert("A data de expiração é obrigatória!");
-      return;
-    }
+    const cartaoValido = await validaCartao(cardNumber);
     setLoading(true);
-    Alert.alert("Compra finalizada com sucesso!");
+    if (cartaoValido){
+      Toast.success("Compra finalizada com sucesso!");
+      removeAll();
+      navigation.navigate("Home1");
+    } else {
+      Toast.error("Cartão inválido!", "top");
+    }
     setLoading(false);
-    removeAll();
-    navigation.goBack();
   };
 
   return (

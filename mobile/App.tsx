@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./src/context/AuthContext";
 import { CartProvider } from "./src/context/CartContext";
 import { AppRoutes } from "./src/routes";
+import ToastManager from 'toastify-react-native'
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <SafeAreaProvider>
         <AuthProvider>
           <CartProvider>
+            <ToastManager/>
             <AppRoutes />
           </CartProvider>
         </AuthProvider>

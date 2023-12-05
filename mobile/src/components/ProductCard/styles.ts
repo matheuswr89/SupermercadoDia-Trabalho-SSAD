@@ -21,10 +21,6 @@ export default StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     width: "94%",
-    minHeight: 200,
-  },
-  promotionImage: {
-    width: "50%",
   },
   descriptionText: {
     flex: 1,

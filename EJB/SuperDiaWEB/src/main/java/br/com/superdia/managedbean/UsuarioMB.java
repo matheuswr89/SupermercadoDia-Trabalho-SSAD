@@ -3,8 +3,6 @@ package br.com.superdia.managedbean;
 import java.io.Serializable;
 import java.util.List;
 
-import br.com.superdia.modelo.Pessoa;
-import br.com.superdia.modelo.Produto;
 import br.com.superdia.modelo.Usuario;
 import br.com.superdia.modelo.UsuarioRequest;
 import br.com.superdia.sessionbeans.IAuth;
@@ -33,7 +31,6 @@ public class UsuarioMB implements Serializable {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Usuario entrar(UsuarioRequest userRequest) {
 		Usuario user = auth.entrar(userRequest.getLogin(), userRequest.getSenha());
-		System.out.println("cheguei");
 		if (user.getId() != null) {
 			return user;
 		}

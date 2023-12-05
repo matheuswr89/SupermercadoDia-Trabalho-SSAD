@@ -1,9 +1,6 @@
 package br.com.superdia;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +12,10 @@ import jakarta.ejb.EJB;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 
 @WebListener
 public class ApplicationControllerListener implements ServletContextListener {
@@ -23,19 +24,19 @@ public class ApplicationControllerListener implements ServletContextListener {
 	private IDados<Produto> iDados;
 
 	public void contextInitialized(ServletContextEvent sce) {
-		System.out.println("Passei contextInitialized");
 		saveProducts("https://www.redbullshopus.com/products.json");
 		saveProducts("https://www.kyliecosmetics.com/products.json");
 	}
-	
+
 	private void saveProducts(String link) {
 		try {
-			URL url = new URL(link);
-			URLConnection yc = url.openConnection();
-			BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-			String inputLine = in.readLine();
+			Client client = ClientBuilder.newClient();
+			WebTarget target = client.target(link);
+			Response response = target.request().get();
+			String inputLine = response.readEntity(String.class);
 			ObjectMapper mapper = new ObjectMapper();
-			JsonNode nameNode = mapper.readTree(inputLine);
+			JsonNode nameNode;
+			nameNode = mapper.readTree(inputLine);
 			ArrayNode nodes = (ArrayNode) nameNode.get("products");
 
 			for (JsonNode e : nodes) {
@@ -44,7 +45,7 @@ public class ApplicationControllerListener implements ServletContextListener {
 				String descricao = e.get("body_html").asText().replaceAll("<[^>]*>", "");
 				;
 				Double preco = e.get("variants").get(0).get("price").asDouble();
-				produto.setDescricao(descricao.substring(0, descricao.length() > 100 ? 100 : descricao.length()));
+				produto.setDescricao(descricao.substring(0, descricao.length() > 50 ? 50 : descricao.length()));
 				produto.setNome(nome);
 				produto.setPreco(preco);
 				produto.setQuantidadeEstoque(120);
@@ -54,12 +55,11 @@ public class ApplicationControllerListener implements ServletContextListener {
 				} catch (Exception e1) {
 				}
 			}
-			in.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {
-		System.err.println("Passei");
 	}
 }

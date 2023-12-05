@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   Keyboard,
   KeyboardAvoidingView,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -12,70 +13,130 @@ import {
 } from "react-native";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import styles from "../global";
-
-const mailFormatValidator = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+import { TextInputMask } from "react-native-masked-text";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import AuthContext from "../context/AuthContext";
+import Constants from "expo-constants";
 
 export const CreateAccount = () => {
+  const {signUp} = useContext(AuthContext);
   const navigation: any = useNavigation();
-  const [email, setEmail] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [show, setShow] = useState(false);
+  const [date, setDate] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [state, setState] = useState({
+    id: 0,
+    perfil: "cliente",
+    senha: "",
+    pessoa: {
+      dataNascimento: "",
+      email: "",
+      endereco: "",
+      id: 0,
+      nome: "",
+      telefone: "",
+      cpf: "",
+    },
+  });
 
   const handleSignUp = async () => {
     Keyboard.dismiss();
-    if (!email.match(mailFormatValidator)) {
-      Alert.alert("Por favor, preencha todos os campos corretamente!");
+    
+    if(!state.pessoa.cpf || !state.pessoa.nome || !state.pessoa.email || !state.pessoa.endereco || !state.pessoa.telefone || !state.pessoa.dataNascimento || !state.senha){
+      Alert.alert("Preencha todos os dados corretamente!");
       return;
     }
+    setIsLoading(true)
+    signUp(state).then((value)=>{
+      if (!value) {
+        setIsLoading(false);
+        return;
+      }
 
-    if (!username.length) {
-      Alert.alert("O nome de usuário é obrigatório!");
-      return;
-    }
-
-    if (!password.length) {
-      Alert.alert("A senha é obrigatória!");
-      return;
-    }
-
-    setIsLoading(true);
+      setIsLoading(false);
+      navigation.goBack();
+    });
   };
+  const handleInputChange = (name: string, value: string) => {
+    setState((prev: any) => ({ ...prev, [name]: value.trim() }));
+  };
+  const handleInputPessoa = (name: string, value: any) => {
+    setState((prev: any) => ({
+      ...prev,
+      pessoa: { ...prev.pessoa, [name]: value},
+    }));
+  };
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate;
+    setDate(currentDate);
+    setShow(false);
+    handleInputPessoa("dataNascimento", formatDate(currentDate));
+  };
+
+  function formatDate(date: Date) {
+    return [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join("-");
+  }
+
+  function formatReverseDate(date: string) {
+    return date.split("-").reverse().join("/");
+  }
+
+  function padTo2Digits(num: number) {
+    return num.toString().padStart(2, "0");
+  }
+
+  const showDatePicker = () => {
+    setShow(true)
+    setDate(new Date());
+  }
 
   return (
     <KeyboardAvoidingView
       behavior="height"
-      style={styles.viewKeyboard}
+      style={[styles.viewKeyboard, {marginTop: 0}]}
       onStartShouldSetResponder={(): any => Keyboard.dismiss()}
     >
-      <Text style={styles.title}>Cadastro</Text>
-
-      <TextInput
-        value={username}
-        onChangeText={setUsername}
-        placeholder={"Nome de usuário"}
-        style={[styles.input]}
-        autoComplete={"username"}
-        secureTextEntry={false}
+      <ScrollView>
+      <Text style={[styles.title, {marginTop: 10}]}>Crie a sua conta aqui!</Text>
+      <TextInputMask
+        value={state.pessoa.cpf}
+        onChangeText={(text) => handleInputPessoa("cpf", text)}
+        style={styles.input}
+        keyboardType="numeric"
+        type="cpf"
+        placeholder="XXX.XXX.XXX-XX"
         onSubmitEditing={Keyboard.dismiss}
         placeholderTextColor="#000"
       />
       <TextInput
-        value={email}
-        onChangeText={setEmail}
+        value={state.pessoa.nome}
+        onChangeText={(text) => handleInputPessoa("nome", text)}
+        placeholder={"Nome"}
+        style={[styles.input]}
+        autoComplete={"username"}
+        onSubmitEditing={Keyboard.dismiss}
+        placeholderTextColor="#000"
+      />
+      <TextInput
+        value={state.pessoa.email}
+        onChangeText={(text) => handleInputPessoa("email", text)}
         placeholder={"Email"}
         style={[styles.input]}
         keyboardType={"email-address"}
         autoComplete={"email"}
-        secureTextEntry={false}
+        autoCapitalize="none"
         onSubmitEditing={Keyboard.dismiss}
         placeholderTextColor="#000"
       />
       <View style={styles.passwordContainer}>
         <TextInput
-          value={password}
-          onChangeText={setPassword}
+          value={state.senha}
+          onChangeText={(text) => handleInputChange("senha", text)}
           placeholder={"Senha"}
           autoCapitalize="none"
           style={[styles.input]}
@@ -90,6 +151,39 @@ export const CreateAccount = () => {
           style={styles.passwordIcon}
         />
       </View>
+      <TouchableOpacity onPress={showDatePicker} style={[styles.input]}>
+        <Text style={styles.date}>
+          {date ? formatReverseDate(state.pessoa.dataNascimento) : "Data de nascimento"}
+        </Text>
+      </TouchableOpacity>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          is24Hour={true}
+          onChange={onChange}
+        />
+      )}
+      <TextInput
+        value={state.pessoa.endereco}
+        onChangeText={(text) => handleInputPessoa("endereco", text)}
+        placeholder={"Endereço"}
+        style={[styles.input]}
+        onSubmitEditing={Keyboard.dismiss}
+        placeholderTextColor="#000"
+      />
+
+      <TextInputMask
+        value={state.pessoa.telefone}
+        onChangeText={(text) => handleInputPessoa("telefone", text)}
+        style={styles.input}
+        keyboardType="numeric"
+        type="cel-phone"
+        placeholder="(XX) XXXXX-XXXX"
+        onSubmitEditing={Keyboard.dismiss}
+        placeholderTextColor="#000"
+      />
 
       <TouchableOpacity
         onPress={handleSignUp}
@@ -98,6 +192,7 @@ export const CreateAccount = () => {
         {!isLoading && <Text style={styles.loginButton}>Criar cadastro</Text>}
         {isLoading && <ActivityIndicator size="large" />}
       </TouchableOpacity>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

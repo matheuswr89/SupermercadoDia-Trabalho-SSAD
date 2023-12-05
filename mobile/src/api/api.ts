@@ -1,18 +1,26 @@
 import axios from "axios";
 
-export async function getProductsApi() {
-  const response = await axios.get(
-    "https://www.redbullshopus.com/products.json"
+export async function validaCartao(cartao: string) {
+  let xmls = `<?xml version="1.0" encoding="UTF-8"?>
+  <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+  <S:Header/>
+  <S:Body>
+    <ns2:validaCartao xmlns:ns2="http://soap.superdia.com.br/">
+        <numeroCartao>${cartao}</numeroCartao>
+    </ns2:validaCartao>
+  </S:Body>
+  </S:Envelope>`;
+
+  const response = await axios.post(
+    "http://192.168.0.105:8080/SuperDia/ValidarCartaoEndpoint",
+    xmls,
+    {
+      withCredentials: false,
+    }
   );
-  const products = response.data.products.map((p: any) => {
-    return {
-      id: p.id,
-      title: p.title,
-      description: p.body_html,
-      image: p.images[0].src,
-      price: p.variants[0].price,
-      quantity: 0,
-    };
-  });
-  return products;
+
+  const data = response.data;
+  const result = data.substring(data.indexOf('<return>') + 8, data.indexOf('</return>'))
+
+  return result === 'true';
 }

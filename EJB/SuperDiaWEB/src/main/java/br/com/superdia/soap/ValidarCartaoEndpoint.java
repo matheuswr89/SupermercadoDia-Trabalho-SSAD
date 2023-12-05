@@ -1,14 +1,14 @@
 package br.com.superdia.soap;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Named;
+import jakarta.ejb.Stateless;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
 
+@Stateless
 @WebService
-@Named
-@RequestScoped
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 public class ValidarCartaoEndpoint {
 	@WebMethod
     public Boolean validaCartao(@WebParam(name = "numeroCartao") String numeroCartao) {

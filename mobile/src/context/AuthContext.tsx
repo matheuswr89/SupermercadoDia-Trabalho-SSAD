@@ -1,11 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { criarConta, login } from "../api/user";
+import { Toast } from "toastify-react-native";
 export interface AuthContextProps {
   user: any;
   isLogged: boolean;
-  signIn(email: string, password: string): Promise<boolean>;
+  signIn(email: string, password: string): Promise<boolean | undefined>;
   signOut(): void;
-  signUp(username: string, email: string, password: string): Promise<void>;
+  signUp(dados: any): Promise<boolean | undefined>;
 }
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
@@ -19,17 +21,17 @@ export const AuthProvider = ({ children }: any) => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const userData = {
-      username: "Matheus",
-      email: "email@email.com",
-      password: "123456",
-    };
+    const response = await login({ login: email, senha: password });
 
-    if (email !== userData.email && password !== userData.password)
-      return false;
+    if (!response["id"]) {
+      Toast.error("Erro ao logar, confirme os dados e tente novamente!", "top");
+      return;
+    }
 
-    await saveUser(userData);
-    setUser(userData);
+    Toast.success("Login realizado com sucesso!");
+    setUser(response);
+    await saveUser(response);
+
     return true;
   };
 
@@ -39,10 +41,18 @@ export const AuthProvider = ({ children }: any) => {
     setUser(null);
   };
 
-  const signUp = async (username: string, email: string, password: string) => {
-    const userData = { username, email, password };
-    saveUser(userData);
-    setUser(userData);
+  const signUp = async (dados: any) => {
+    const response = await criarConta(dados);
+    if (!response["senha"]) {
+      Toast.error("Já tem um usuário com esse CPF ou EMAIL!", "top");
+      return;
+    } 
+      Toast.success(
+        `Usuário ${dados.id === 0 ? "cadastrado" : "alterado"} com sucesso!`
+      );
+      saveUser(response);
+      setUser(response);
+    return true;
   };
 
   const logInUser = async () => {
@@ -54,7 +64,7 @@ export const AuthProvider = ({ children }: any) => {
     <AuthContext.Provider
       value={{
         user,
-        isLogged: !!user?.email,
+        isLogged: !!user?.id,
         signIn,
         signOut,
         signUp,
