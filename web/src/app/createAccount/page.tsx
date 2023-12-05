@@ -51,9 +51,11 @@ export default function CreateAccount({
 
   const submit = async (e: any) => {
     e.preventDefault();
-    if (state.perfil.length === 0 && type !== "gerente") {
+    if (type !== "gerente") {
       setState((prev: any) => ({ ...prev, perfil: "cliente" }));
+      new Promise(resolve => setTimeout(resolve, 300));
     }
+    console.log(state)
     createAccount(state, reload, cancel);
   };
 
@@ -77,7 +79,7 @@ export default function CreateAccount({
   return (
     <main className={stylesPage.main}>
       <div className={styles.signup_container}>
-        <h2>{state.id === 0 ? "Create" : "Update"} Account</h2>
+        <h2>{state.id === 0 ? "Criar" : "Atualizar"} Conta</h2>
         <form id="signup-form" onSubmit={submit}>
           <div className={styles.flex_div}>
             <div>
@@ -97,7 +99,7 @@ export default function CreateAccount({
               </div>
 
               <div className={styles.form_group}>
-                <label htmlFor="nome">Name:</label>
+                <label htmlFor="nome">Nome:</label>
                 <input
                   type="text"
                   id="nome"
@@ -121,7 +123,7 @@ export default function CreateAccount({
               </div>
 
               <div className={styles.form_group}>
-                <label htmlFor="senha">Password:</label>
+                <label htmlFor="senha">Senha:</label>
                 <input
                   type="password"
                   id="senha"
@@ -134,7 +136,7 @@ export default function CreateAccount({
             </div>
             <div>
               <div className={styles.form_group}>
-                <label htmlFor="dataNascimento">Date of Birth:</label>
+                <label htmlFor="dataNascimento">Data de nascimento:</label>
                 <input
                   type="date"
                   id="dataNascimento"
@@ -146,7 +148,7 @@ export default function CreateAccount({
               </div>
 
               <div className={styles.form_group}>
-                <label htmlFor="endereco">Address:</label>
+                <label htmlFor="endereco">Endereço:</label>
                 <input
                   type="text"
                   id="endereco"
@@ -158,7 +160,7 @@ export default function CreateAccount({
               </div>
 
               <div className={styles.form_group}>
-                <label htmlFor="telefone">Phone:</label>
+                <label htmlFor="telefone">Telefone:</label>
                 <InputMask
                   mask="(99) 99999-9999"
                   maskChar="_"
@@ -174,7 +176,7 @@ export default function CreateAccount({
 
               {type === "gerente" && (
                 <div className={styles.form_group}>
-                  <label htmlFor="perfil">Profile:</label>
+                  <label htmlFor="perfil">Perfil:</label>
                   <select
                     id="perfil"
                     name="perfil"
@@ -183,17 +185,17 @@ export default function CreateAccount({
                     onChange={handleInputChange}
                     defaultValue={state.perfil}
                   >
-                    <option value="administrador">Administrator</option>
-                    <option value="caixa">Cashier</option>
-                    <option value="cliente">Customer</option>
+                    <option value="administrador">Administrador</option>
+                    <option value="caixa">Caixa</option>
+                    <option value="cliente">Cliente</option>
                   </select>
                 </div>
               )}
             </div>
           </div>
           <div className={styles.form_group}>
-            <button type="submit">Create Account</button>
-            <button onClick={cancel}>Cancel</button>
+            <button type="submit">{state.id === 0 ? "Criar" : "Atualizar"} Conta</button>
+            <button onClick={cancel}>Cancelar</button>
           </div>
         </form>
       </div>

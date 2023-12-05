@@ -1,19 +1,16 @@
 "use client";
 import styles from "./style.module.css";
 import stylesPage from "../page.module.css";
-import { useLayoutEffect, useContext, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   cadastrarProduto,
   listarProduto,
   removerProduto,
 } from "@/api/produtos";
-import AuthContext from "../context/AuthContext";
-import { redirect } from "next/navigation";
 import ProtectedRoute from "../protected";
 
 export default function Produto() {
-  const { user } = useContext(AuthContext);
   const [state, setState] = useState({
     nome: "",
     descricao: "",
@@ -26,8 +23,6 @@ export default function Produto() {
   const [produtos, setProdutos] = useState<any>([]);
 
   useLayoutEffect(() => {
-    //if (user === undefined || user.perfil !== undefined && user.perfil !== "administrador") redirect("/");
-    //else
     getProducts();
   }, []);
 
@@ -80,12 +75,12 @@ export default function Produto() {
     <ProtectedRoute>
       <main className={stylesPage.main}>
         <div className={styles.product_create_container}>
-          <h2>Create Product</h2>
+          <h2>{state.id === 0 ? "Criar" : "Atualizar"} Produto</h2>
           <form id="product-create-form" onSubmit={submit}>
             <div className={styles.flex_div}>
               <div>
                 <div className={styles.form_group}>
-                  <label htmlFor="nome">Name:</label>
+                  <label htmlFor="nome">Nome:</label>
                   <input
                     type="text"
                     id="nome"
@@ -96,7 +91,7 @@ export default function Produto() {
                   />
                 </div>
                 <div className={styles.form_group}>
-                  <label htmlFor="estoqueMinimo">Minimum Stock:</label>
+                  <label htmlFor="estoqueMinimo">Quantidade minima em estoque:</label>
                   <input
                     type="number"
                     id="estoqueMinimo"
@@ -109,7 +104,7 @@ export default function Produto() {
               </div>
               <div>
                 <div className={styles.form_group}>
-                  <label htmlFor="preco">Price:</label>
+                  <label htmlFor="preco">Preço:</label>
                   <input
                     type="number"
                     id="preco"
@@ -122,7 +117,7 @@ export default function Produto() {
                 </div>
 
                 <div className={styles.form_group}>
-                  <label htmlFor="quantidadeEstoque">Stock Quantity:</label>
+                  <label htmlFor="quantidadeEstoque">Quantidade em estoque:</label>
                   <input
                     type="number"
                     id="quantidadeEstoque"
@@ -135,7 +130,7 @@ export default function Produto() {
               </div>
             </div>
             <div className={styles.form_group}>
-              <label htmlFor="descricao">Description:</label>
+              <label htmlFor="descricao">Descrição:</label>
               <input
                 type="text"
                 id="descricao"
@@ -147,9 +142,9 @@ export default function Produto() {
             </div>
             <div className={styles.form_group}>
               <button type="submit">
-                {!state.nome ? "Create" : "Update"} Product
+              {state.id === 0 ? "Criar" : "Atualizar"} Produto
               </button>
-              <button onClick={cancel}>Cancel</button>
+              <button onClick={cancel}>Cancelar</button>
             </div>
           </form>
         </div>
@@ -160,12 +155,12 @@ export default function Produto() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Stock Quantity</th>
-                <th>Minimum Stock</th>
-                <th>Action</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Preco</th>
+                <th>Quantidade em estoque</th>
+                <th>Quantidade minima</th>
+                <th>Ação</th>
               </tr>
             </thead>
             <tbody>
@@ -182,13 +177,13 @@ export default function Produto() {
                       className={styles.edit_btn}
                       onClick={() => editProduct(produto)}
                     >
-                      Edit
+                      Editar
                     </button>
                     <button
                       className={styles.remove_btn}
                       onClick={() => removeProduct(produto)}
                     >
-                      Remove
+                      Remover
                     </button>
                   </td>
                 </tr>

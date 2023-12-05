@@ -1,5 +1,5 @@
 "use client";
-import { getProductsApi } from "@/api/api";
+import { validaCartao } from "@/api/api";
 import { useEffect, useState, useContext } from "react";
 import Product from "./components/Product";
 import styles from "./page.module.css";
@@ -11,7 +11,6 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       const productsData = await listarProduto();
-
       setProducts(productsData);
     }
     fetchData();

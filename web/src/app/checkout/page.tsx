@@ -8,6 +8,7 @@ import styles from "../page.module.css";
 import AuthContext from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { validaCartao } from "@/api/api";
 
 export default function PaymentForm() {
   const { removeAll } = useContext(CartContext);
@@ -39,9 +40,16 @@ export default function PaymentForm() {
     setState((prev) => ({ ...prev, focus: evt.target.name }));
   };
 
-  const finalizeCheckout = () => {
-    removeAll();
-    push("/");
+  const finalizeCheckout = async (e: any) => {
+    e.preventDefault();
+    const cartaoValido = await validaCartao(state.number)
+    if (cartaoValido){
+      removeAll();
+      push("/");
+      toast.success("Compra finalizada com sucesso!")
+    } else {
+      toast.error("Cartão inválido!")
+    }
   };
 
   return (
@@ -55,7 +63,7 @@ export default function PaymentForm() {
         focused={state.focus}
         acceptedCards={["visa", "mastercard"]}
       />
-      <form className={styles.cardCredit}>
+      <form className={styles.cardCredit} onSubmit={finalizeCheckout}>
         <InputMask
           mask="9999 9999 9999 9999"
           maskChar=" "
@@ -99,10 +107,10 @@ export default function PaymentForm() {
             className={styles.minorInputs}
           />
         </div>
-      </form>
-      <button className={styles.buttonCheckout} onClick={finalizeCheckout}>
+      <button className={styles.buttonCheckout} type="submit">
         Finalizar compra
       </button>
+      </form>
     </div>
   );
 }

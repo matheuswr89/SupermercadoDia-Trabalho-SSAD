@@ -1,22 +1,17 @@
 "use client";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import CreateAccount from "../createAccount/page";
 import stylesPage from "../page.module.css";
 import styles from "./style.module.css";
 import { toast } from "react-toastify";
 import { listarUsers, removerUser } from "@/api/user";
-import AuthContext from "../context/AuthContext";
-import { redirect } from "next/navigation";
 import ProtectedRoute from "../protected";
 
 export default function Gerente() {
-  const userContext = useContext(AuthContext);
   const [users, setUsers] = useState<any>([]);
   const [user, setUser] = useState();
 
   useLayoutEffect(() => {
-    //   if (user === undefined || userContext.user.perfil !== undefined && userContext.user.perfil !== "administrador") redirect("/")
-    //   else
     getUsers();
   }, []);
 
@@ -49,9 +44,9 @@ export default function Gerente() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>Nome</th>
                 <th>Email</th>
-                <th>Action</th>
+                <th>Ação</th>
               </tr>
             </thead>
             <tbody>
@@ -65,13 +60,13 @@ export default function Gerente() {
                       className={styles.edit_btn}
                       onClick={() => editUser(user)}
                     >
-                      Edit
+                      Editar
                     </button>
                     <button
                       className={styles.remove_btn}
                       onClick={() => removeUser(user)}
                     >
-                      Remove
+                      Remover
                     </button>
                   </td>
                 </tr>
