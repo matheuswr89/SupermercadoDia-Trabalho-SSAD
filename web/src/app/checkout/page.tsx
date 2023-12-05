@@ -1,15 +1,26 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import InputMask from "react-input-mask";
 import CartContext from "../context/CartContext";
 import styles from "../page.module.css";
+import AuthContext from "../context/AuthContext";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { validaCartao } from "@/api/api";
 
 export default function PaymentForm() {
   const { removeAll } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
   const { push } = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      push("/");
+      toast.error("Você não está logado!");
+    }
+  }, [user]);
 
   const [state, setState] = useState({
     number: "",
@@ -29,9 +40,16 @@ export default function PaymentForm() {
     setState((prev) => ({ ...prev, focus: evt.target.name }));
   };
 
-  const finalizeCheckout = () => {
-    removeAll();
-    push("/");
+  const finalizeCheckout = async (e: any) => {
+    e.preventDefault();
+    const cartaoValido = await validaCartao(state.number)
+    if (cartaoValido){
+      removeAll();
+      push("/");
+      toast.success("Compra finalizada com sucesso!")
+    } else {
+      toast.error("Cartão inválido!")
+    }
   };
 
   return (
@@ -45,7 +63,7 @@ export default function PaymentForm() {
         focused={state.focus}
         acceptedCards={["visa", "mastercard"]}
       />
-      <form className={styles.cardCredit}>
+      <form className={styles.cardCredit} onSubmit={finalizeCheckout}>
         <InputMask
           mask="9999 9999 9999 9999"
           maskChar=" "
@@ -89,10 +107,10 @@ export default function PaymentForm() {
             className={styles.minorInputs}
           />
         </div>
-      </form>
-      <button className={styles.buttonCheckout} onClick={finalizeCheckout}>
+      <button className={styles.buttonCheckout} type="submit">
         Finalizar compra
       </button>
+      </form>
     </div>
   );
 }

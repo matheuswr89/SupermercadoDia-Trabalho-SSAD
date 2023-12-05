@@ -4,12 +4,22 @@ import { useContext } from "react";
 import Product from "../components/Product";
 import CartContext from "../context/CartContext";
 import styles from "../page.module.css";
+import AuthContext from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Cart() {
   const { cart, total, quantity } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
+
   const { push } = useRouter();
 
-  const navigateToCheckout = () => push("/checkout");
+  const navigateToCheckout = () => {
+    if(user) push("/checkout");
+    else {
+      toast.error("Você precisa logar antes de continuar.")
+      push("/login?redirect=checkout")
+    }
+  };
 
   return (
     <main className={styles.main}>

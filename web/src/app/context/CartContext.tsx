@@ -68,7 +68,7 @@ export const CartProvider = ({ children }: any) => {
 
   const updateCartQuantity = (cartData: any[]) => {
     const total = cartData.reduce(
-      (partialSum, item) => partialSum + item.quantity * item.price,
+      (partialSum, item) => partialSum + item.quantity * item.preco,
       0
     );
     setTotal(total);
