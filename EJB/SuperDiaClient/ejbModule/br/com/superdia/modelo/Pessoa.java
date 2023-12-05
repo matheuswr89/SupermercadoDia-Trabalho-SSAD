@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,9 @@ public class Pessoa implements Serializable {
 	private String email;
 	private String telefone;
 	private LocalDate dataNascimento;
-    @OneToOne(mappedBy = "pessoa")
+    
+	@JsonbTransient
+	@OneToOne(mappedBy = "pessoa")
     private Usuario usuario;
     
 	public Long getId() {

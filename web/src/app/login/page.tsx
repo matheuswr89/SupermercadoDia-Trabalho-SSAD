@@ -1,11 +1,14 @@
 "use client";
 import styles from "./style.module.css";
 import stylesPage from "../page.module.css";
-import { useState } from "react";
-import { login } from "@/api/login";
-import { toast } from 'react-toastify';
+import { useState, useContext } from "react";
+import AuthContext from "../context/AuthContext";
+import { useSearchParams } from 'next/navigation'
 
 export default function Login() {
+  const {logar} = useContext(AuthContext);
+  const searchParams = useSearchParams()
+
   const [state, setState] = useState({
     login: "",
     senha: "",
@@ -13,10 +16,7 @@ export default function Login() {
 
   const submit = async (e: any) => {
     e.preventDefault();
-    const response = await login(state);
-    if (!response["id"]){
-      toast.error("Erro ao logar, confirme os dados e tente novamente!")
-    }
+    logar(state, searchParams.get('redirect'));
   };
   
   const handleInputChange = (evt: any) => {

@@ -3,6 +3,7 @@ package br.com.superdia.modelo;
 import java.time.LocalDate;
 
 public class UsuarioRequest {
+	private Long id;
 	private String login, senha, perfil;
 	private String nome;
 	private String endereco;
@@ -10,6 +11,14 @@ public class UsuarioRequest {
 	private String telefone;
 	private LocalDate dataNascimento;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getLogin() {
 		return login;
 	}

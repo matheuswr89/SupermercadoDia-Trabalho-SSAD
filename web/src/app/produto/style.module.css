@@ -3,7 +3,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 390px;
   text-align: center;
 }
 
@@ -13,6 +13,7 @@
 
 .form_group {
   margin-bottom: 20px;
+  margin-left: 5px;
 }
 
 .form_group label {
@@ -37,6 +38,12 @@
   width: 100%;
 }
 
+
+.form_group button:nth-child(2) {
+  margin-top: 5px;
+  background-color: #f44336;
+}
+
 .product_list_container {
   background-color: #fff;
   padding: 20px;
@@ -50,21 +57,25 @@
   gap: 8px;
 }
 
-.edit_btn, .remove_btn {
-  padding: 8px;
+.action_buttons button {
+  color: #fff;
+  border-radius: 4px;
+  border: none;
+  padding: 11px;
   cursor: pointer;
 }
 
 .edit_btn {
   background-color: #4caf50;
-  color: #fff;
-  border-radius: 4px;
-  border: none;
 }
 
 .remove_btn {
   background-color: #f44336;
-  color: #fff;
-  border-radius: 4px;
-  border: none;
+}
+
+.flex_div{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

@@ -22,7 +22,7 @@ export default function Error({
         flexDirection: "column",
       }}
     >
-      <h2>Something went wrong!</h2>
+      <h2>Ocorreu um erro, tente novamente!</h2>
       <button onClick={() => reset()}>Try again</button>
     </div>
   );

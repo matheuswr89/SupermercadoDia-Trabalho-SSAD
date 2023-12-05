@@ -1,15 +1,25 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import InputMask from "react-input-mask";
 import CartContext from "../context/CartContext";
 import styles from "../page.module.css";
+import AuthContext from "../context/AuthContext";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function PaymentForm() {
   const { removeAll } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
   const { push } = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      push("/");
+      toast.error("Você não está logado!");
+    }
+  }, [user]);
 
   const [state, setState] = useState({
     number: "",
