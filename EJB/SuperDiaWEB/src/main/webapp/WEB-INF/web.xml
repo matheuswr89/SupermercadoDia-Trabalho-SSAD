@@ -21,19 +21,4 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/faces/*</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-        <servlet-name>ValidarCartaoEndpoint</servlet-name>
-        <servlet-class>br.com.superdia.soap.ValidarCartaoEndpoint</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ValidarCartaoEndpoint</servlet-name>
-        <url-pattern>/ValidarCartaoService</url-pattern>
-    </servlet-mapping>
-	
-	<context-param>
-		<param-name>org.jboss.ws.webapp.ServletContextListener</param-name>
-		<param-value>mycompany.ServletContextListenerImpl</param-value>
-	</context-param>
 </web-app>

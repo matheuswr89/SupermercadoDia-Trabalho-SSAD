@@ -12,7 +12,7 @@ export default function DetailsCart() {
   const navigation: any = useNavigation();
 
   const subtotal = cart.reduce(
-    (partialSum, item) => partialSum + item.price * item.quantity,
+    (partialSum, item) => partialSum + item.preco * item.quantity,
     0
   );
   const quantidade = cart.reduce(

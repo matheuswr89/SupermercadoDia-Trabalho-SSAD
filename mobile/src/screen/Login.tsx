@@ -37,7 +37,6 @@ export default function Login() {
 
     signIn(email, password).then((value) => {
       if (!value) {
-        Alert.alert("Dados de login incorretos!");
         setIsLoading(false);
         return;
       }

@@ -77,4 +77,8 @@ export default StyleSheet.create({
     backgroundColor: "#fff",
     height: "100%",
   },
+  date:{
+    fontSize: 18,
+    marginTop: 12
+  }
 });

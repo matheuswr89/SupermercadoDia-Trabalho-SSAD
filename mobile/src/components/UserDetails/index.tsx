@@ -12,8 +12,8 @@ export default function UserDetails() {
 
   return (
     <View style={global.center}>
-      <Text style={styles.dadosText}>{user.username}</Text>
-      <Text style={styles.dadosText}>{user.email}</Text>
+      <Text style={styles.dadosText}>{user.pessoa.nome}</Text>
+      <Text style={styles.dadosText}>{user.pessoa.email}</Text>
       <TouchableOpacity onPress={signOut}>
         <Text style={styles.sairLink}>Sair</Text>
       </TouchableOpacity>
