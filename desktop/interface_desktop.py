@@ -59,7 +59,7 @@ class CaixaSupermercado:
         password = simpledialog.askstring("Login", "Digite a senha:", show="*")
 
         try:
-            response = requests.get("http://localhost:8080//SuperDia/api/listar")
+            response = requests.get("http://localhost:8080/SuperDia/api/listar")
             response.raise_for_status()
 
             lista_usuarios = response.json()
@@ -79,7 +79,7 @@ class CaixaSupermercado:
 
    # ATENÇÃO!
     # Remover comentário e remover a função TEMP
-    '''
+   
     def obter_lista_produtos(self):
         try:
             # Fazer a requisição HTTP para obter a lista de produtos
@@ -92,22 +92,6 @@ class CaixaSupermercado:
 
         except requests.RequestException as e:
             print(f"Erro na requisição HTTP: {e}")
-            return []
-    '''
-
-    # TEMP
-    def obter_lista_produtos(self):
-        try:
-            with open("lista.json", "r") as file:
-                lista_produtos = json.load(file)
-                return lista_produtos
-
-        except FileNotFoundError:
-            print("Arquivo de produtos não encontrado.")
-            return []
-
-        except json.JSONDecodeError as e:
-            print(f"Erro ao decodificar o JSON: {e}")
             return []
 
     def obter_preco_por_id(self, produto_id):
