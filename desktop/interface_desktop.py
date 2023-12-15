@@ -44,13 +44,17 @@ class CaixaSupermercado:
         self.enter_button = tk.Button(self.buttons_frame, text="Enter", command=self.processar_produto)
         self.enter_button.grid(row=0, column=2, padx=5)
 
+        self.finalizar_button = tk.Button(self.buttons_frame, text="Finalizar Compra", command=self.finalizar_compra)
+        self.finalizar_button.grid(row=0, column=3, padx=5)
+
         self.valor_total = 0.0
 
         # Fazer a requisição HTTP para obter a lista de produtos
         self.lista_produtos = self.obter_lista_produtos()
 
-    # TEMP ---------------------------------------------------
-        
+        # Adicione uma lista para armazenar os produtos selecionados
+        self.lista_compras = []
+
     def obter_lista_produtos(self):
         try:
             with open("lista.json", "r") as file:
@@ -64,13 +68,18 @@ class CaixaSupermercado:
         except json.JSONDecodeError as e:
             print(f"Erro ao decodificar o JSON: {e}")
             return []
-        
-    # TEMP ---------------------------------------------------
 
     def obter_preco_por_id(self, produto_id):
         for produto in self.lista_produtos:
             if str(produto["id"]) == str(produto_id):
                 return produto["preco"]
+
+        return None  # Retorna None se o ID não for encontrado na lista
+
+    def obter_info_produto_por_id(self, produto_id):
+        for produto in self.lista_produtos:
+            if str(produto["id"]) == str(produto_id):
+                return produto
 
         return None  # Retorna None se o ID não for encontrado na lista
 
@@ -93,6 +102,21 @@ class CaixaSupermercado:
                 valor_produto = preco_produto * quantidade
 
                 self.valor_total += valor_produto
+
+                # Obter informações do produto da lista
+                produto_info = self.obter_info_produto_por_id(produto_id)
+
+                # Adicionar cada unidade do produto à lista de compras
+                for _ in range(quantidade):
+                    produto = {
+                        "id": int(produto_id),
+                        "descricao": produto_info["descricao"],
+                        "estoqueMinimo": produto_info["estoqueMinimo"],
+                        "nome": produto_info["nome"],
+                        "preco": produto_info["preco"],
+                        "quantidadeEstoque": produto_info["quantidadeEstoque"]
+                    }
+                    self.lista_compras.append(produto)
 
                 self.produtos_text.config(state=tk.NORMAL)
                 self.produtos_text.insert(tk.END, f"ID: {produto_id} \t\t\t {quantidade} unid \t\t\t R$ {valor_produto:.2f}\n")
@@ -125,6 +149,22 @@ class CaixaSupermercado:
                 self.quantidade_value.set(str(current_value - 1))
         except ValueError:
             print("A quantidade deve ser um número inteiro.")
+
+    def finalizar_compra(self):
+        # Criar o JSON final com a estrutura desejada
+        compra_json = {
+            "produtos": self.lista_compras,
+            "usuario": {
+                # As informações do usuário (adapte conforme necessário)
+            },
+            "valorTotal": self.valor_total
+        }
+
+        # Exemplo de como salvar o JSON em um arquivo
+        with open("compra.json", "w") as json_file:
+            json.dump(compra_json, json_file, indent=2)
+
+        # Pode imprimir a lista de compras ou realizar outras ações necessárias
 
 if __name__ == "__main__":
     root = tk.Tk()
