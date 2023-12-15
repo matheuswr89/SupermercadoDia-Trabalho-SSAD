@@ -1,8 +1,10 @@
 import json
-import tkinter as tk
 import requests
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 
 class CaixaSupermercado:
+
     def __init__(self, root):
         self.root = root
         self.root.title("Caixa de Supermercado")
@@ -44,7 +46,7 @@ class CaixaSupermercado:
         self.enter_button = tk.Button(self.buttons_frame, text="Enter", command=self.processar_produto)
         self.enter_button.grid(row=0, column=2, padx=5)
 
-        self.finalizar_button = tk.Button(self.buttons_frame, text="Finalizar Compra", command=self.finalizar_compra)
+        self.finalizar_button = tk.Button(self.buttons_frame, text="Finalizar Compra", command=self.obter_dados_cliente)
         self.finalizar_button.grid(row=0, column=3, padx=5)
 
         self.valor_total = 0.0
@@ -55,6 +57,25 @@ class CaixaSupermercado:
         # Adicione uma lista para armazenar os produtos selecionados
         self.lista_compras = []
 
+    # ATENÇÃO!
+    # Remover comentáio e remover a função TEMP
+    '''
+    def obter_lista_produtos(self):
+        try:
+            # Fazer a requisição HTTP para obter a lista de produtos
+            response = requests.get("http://localhost:8080/SuperDia/api/produtos/listar")
+            response.raise_for_status()  # Verifica se a requisição foi bem-sucedida
+
+            # Interpretar o JSON da resposta
+            lista_produtos = response.json()
+            return lista_produtos
+
+        except requests.RequestException as e:
+            print(f"Erro na requisição HTTP: {e}")
+            return []
+    '''
+
+    # TEMP
     def obter_lista_produtos(self):
         try:
             with open("lista.json", "r") as file:
@@ -150,21 +171,90 @@ class CaixaSupermercado:
         except ValueError:
             print("A quantidade deve ser um número inteiro.")
 
-    def finalizar_compra(self):
-        # Criar o JSON final com a estrutura desejada
-        compra_json = {
-            "produtos": self.lista_compras,
-            "usuario": {
-                # As informações do usuário (adapte conforme necessário)
-            },
-            "valorTotal": self.valor_total
-        }
+    def validar_cartao_credito(self, numero_cartao):
+        xmls = f"""<?xml version="1.0" encoding="UTF-8"?>
+                   <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+                    <S:Header/>
+                    <S:Body>
+                        <ns2:validaCartao xmlns:ns2="http://soap.superdia.com.br/">
+                            <numeroCartao>{numero_cartao}</numeroCartao>
+                        </ns2:validaCartao>
+                    </S:Body>
+                   </S:Envelope>"""
+        try:
+            r = requests.post('http://localhost:8080/SuperDia/ValidarCartaoEndpoint', data=xmls)
+            r.raise_for_status()  # Verifica se a requisição foi bem-sucedida
 
-        # Exemplo de como salvar o JSON em um arquivo
-        with open("compra.json", "w") as json_file:
-            json.dump(compra_json, json_file, indent=2)
+            valid = r.text[r.text.index('<return>') + 8:r.text.index('</return>')].capitalize()
+            return valid == 'True'
 
-        # Pode imprimir a lista de compras ou realizar outras ações necessárias
+        except requests.RequestException as e:
+            print(f"Erro na requisição para validar cartão: {e}")
+            return False
+
+    def obter_dados_cliente(self):
+        
+        # Verificar se há itens na lista de compras
+        if not self.lista_compras:
+            messagebox.showinfo("Compra Cancelada", "Adicione itens à lista de compras antes de finalizar a compra.")
+            return
+
+        # Use um diálogo para obter o CPF do cliente
+        cpf_cliente = simpledialog.askstring("CPF do Cliente", "Digite o CPF do Cliente:")
+
+        if cpf_cliente:
+
+            # ATENÇÂO
+            # Recuperar os dados do cliente através da pesquisa do CPF na API.
+            
+            # Solicita o número do cartão de crédito
+            numero_cartao = simpledialog.askstring("Número do Cartão", "Digite o número do Cartão de Crédito:")
+
+            if numero_cartao:
+
+                # Valida o número do cartão de crédito
+                if self.validar_cartao_credito(numero_cartao):
+
+                    # ATENÇÃO!
+                    # Adicionar os dados do cliente ao extrato de compra.
+                    compra_json = {
+                        "produtos": self.lista_compras,
+                        "usuario": {
+                            "cpf": cpf_cliente,
+                            "numeroCartao": numero_cartao,
+                            
+                            # ... outros dados do cliente
+                        },
+                        "valorTotal": self.valor_total
+                    }
+
+                    # ATENÇÃO!
+                    # Salvar compra no banco de dados através da API.
+
+                    # TEMP
+                    # Salvando o json em um arquivo.
+                    with open("compra.json", "w") as json_file:
+                        json.dump(compra_json, json_file, indent=2)
+
+                    # Limpando os campos e reiniciando a lista de compras
+                    self.produtos_text.config(state=tk.NORMAL)
+                    self.produtos_text.delete("1.0", tk.END)
+                    self.produtos_text.config(state=tk.DISABLED)
+
+                    self.valor_total = 0.0
+                    self.valor_total_label.config(text=f"Valor Total: R$ {self.valor_total:.2f}")
+
+                    self.lista_compras = []
+
+                    messagebox.showinfo("Compra Concluída", "Compra finalizada com sucesso!")
+
+                else:
+                    # Cartão inválido
+                    messagebox.showinfo("Compra Cancelada", "Número do cartão de crédito inválido. Compra cancelada.")
+
+            else:
+                # Número do cartão não fornecido
+                messagebox.showinfo("Compra Cancelada", "Número do cartão de crédito não fornecido. Compra cancelada.")
 
 if __name__ == "__main__":
     root = tk.Tk()
