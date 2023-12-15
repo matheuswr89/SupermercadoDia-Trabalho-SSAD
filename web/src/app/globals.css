@@ -8,6 +8,10 @@ button {
   cursor: pointer;
 }
 
+nav div a:hover {
+  filter: brightness(0.5);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

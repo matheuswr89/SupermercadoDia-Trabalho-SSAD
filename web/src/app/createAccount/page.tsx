@@ -51,12 +51,12 @@ export default function CreateAccount({
 
   const submit = async (e: any) => {
     e.preventDefault();
+    let user = state;
     if (type !== "gerente") {
-      setState((prev: any) => ({ ...prev, perfil: "cliente" }));
-      new Promise(resolve => setTimeout(resolve, 300));
+      user.perfil= "cliente";
     }
-    console.log(state)
-    createAccount(state, reload, cancel);
+    console.log(user)
+    createAccount(user, reload, cancel);
   };
 
   const cancel = () => {

@@ -4,6 +4,7 @@
 		<jta-data-source>SuperDiaDS</jta-data-source>
 		<class>br.com.superdia.modelo.Produto</class>
 		<class>br.com.superdia.modelo.Pessoa</class>
+		<class>br.com.superdia.modelo.Compra</class>
 		<class>br.com.superdia.modelo.Usuario</class>
 		<properties>
 			<property name="hibernate.enable_lazy_load_no_trans" value="true" />

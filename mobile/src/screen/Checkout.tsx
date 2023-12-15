@@ -15,10 +15,13 @@ import CartContext from "../context/CartContext";
 import global from "../global";
 import { validaCartao } from "../api/api";
 import { Toast } from "toastify-react-native";
+import { cadastrarCompra } from "../api/compra";
+import AuthContext from "../context/AuthContext";
 
 export default function Checkout() {
   const navigation: any = useNavigation();
-  const { removeAll } = useContext(CartContext);
+  const { removeAll, cart } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
   const [cardNumber, setCardNumber] = useState("");
   const [name, setName] = useState("");
   const [cvc, setCvc] = useState("");
@@ -35,8 +38,13 @@ export default function Checkout() {
     const cartaoValido = await validaCartao(cardNumber);
     setLoading(true);
     if (cartaoValido){
+      const total = cart.reduce(
+        (partialSum, item) => partialSum + item.preco * item.quantity,
+        0
+      );
       Toast.success("Compra finalizada com sucesso!");
       removeAll();
+      cadastrarCompra({produtos:[...cart], usuario: user, valorTotal: total})
       navigation.navigate("Home1");
     } else {
       Toast.error("Cartão inválido!", "top");

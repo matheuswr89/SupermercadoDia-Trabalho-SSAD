@@ -9,9 +9,10 @@ import AuthContext from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { validaCartao } from "@/api/api";
+import { cadastrarCompra } from "@/api/compra";
 
 export default function PaymentForm() {
-  const { removeAll } = useContext(CartContext);
+  const { removeAll, cart, total } = useContext(CartContext);
   const { user } = useContext(AuthContext);
   const { push } = useRouter();
 
@@ -46,6 +47,7 @@ export default function PaymentForm() {
     if (cartaoValido){
       removeAll();
       push("/");
+      cadastrarCompra({produtos:[...cart], usuario: user, valorTotal: total})
       toast.success("Compra finalizada com sucesso!")
     } else {
       toast.error("Cartão inválido!")

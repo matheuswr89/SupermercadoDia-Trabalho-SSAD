@@ -15,6 +15,7 @@ export default function Navbar() {
   const navigateToCreateAccount = () => push("/createAccount");
   const navigateToProdutos = () => push("/produto");
   const navigateToUsers = () => push("/gerente");
+  const navigateToCompras = () => push("/compras");
 
   return (
     <nav className={styles.navbar}>
@@ -32,6 +33,7 @@ export default function Navbar() {
         {user && user["perfil"] === "administrador" && (
           <>
             <a onClick={navigateToProdutos}>Produtos</a>
+            <a onClick={navigateToCompras}>Compras</a>
             <a onClick={navigateToUsers}>Usuários</a>
           </>
         )}

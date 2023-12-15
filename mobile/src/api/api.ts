@@ -12,7 +12,7 @@ export async function validaCartao(cartao: string) {
   </S:Envelope>`;
 
   const response = await axios.post(
-    "http://192.168.0.105:8080/SuperDia/ValidarCartaoEndpoint",
+    "http://192.168.0.100:8080/SuperDia/ValidarCartaoEndpoint",
     xmls,
     {
       withCredentials: false,

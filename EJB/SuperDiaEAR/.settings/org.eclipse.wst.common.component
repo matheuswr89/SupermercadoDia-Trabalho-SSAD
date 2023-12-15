@@ -4,13 +4,10 @@
         <dependent-module archiveName="SuperDia.jar" deploy-path="/" handle="module:/resource/SuperDia/SuperDia">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="SuperDiaClient.jar" deploy-path="/" handle="module:/resource/SuperDiaClient/SuperDiaClient">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="SuperDiaCDI.jar" deploy-path="/" handle="module:/resource/SuperDiaCDI/SuperDiaCDI">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="SuperDiaWeb.war" deploy-path="/" handle="module:/resource/SuperDiaWeb/SuperDiaWeb">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="SuperDiaClient.jar" deploy-path="/" handle="module:/resource/SuperDiaClient/SuperDiaClient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>
